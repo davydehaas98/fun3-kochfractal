@@ -6,28 +6,32 @@ package calculate;
 
 import javafx.scene.paint.Color;
 
+import java.util.Observable;
+
 /**
  *
  * @author Peter Boots
  * Modified for FUN3 by Gertjan Schouten
  */
-public class KochFractal {
-    private MyRunnable myRunnable;
+public class KechFractal extends Observable {
+    private MyTask myTask;
     private int level = 1;      // The current level of the fractal
     private int nrOfEdges = 3;  // The number of edges in the current level of the fractal
     private float hue;          // Hue value of color for next edge
     private boolean cancelled;  // Flag to indicate that calculation has been cancelled
-
-    public KochFractal(MyRunnable myRunnable) {
-        this.myRunnable = myRunnable;
+    public KechFractal(MyTask myTask) {
+        this.myTask = myTask;
     }
+
 
     private void drawKochEdge(double ax, double ay, double bx, double by, int n) {
         if (!cancelled) {
             if (n == 1) {
                 hue = hue + 1.0f / nrOfEdges;
-                Edge e = new Edge(ax, ay, bx, by, Color.hsb(hue*360.0, 1.0, 1.0));
-                myRunnable.addEdge(e);
+                Edge edge = new Edge(ax, ay, bx, by, Color.hsb(hue*360.0, 1.0, 1.0));
+                setChanged();
+                notifyObservers(edge);
+
             } else {
                 double angle = Math.PI / 3.0 + Math.atan2(by - ay, bx - ax);
                 double distabdiv3 = Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)) / 3;
