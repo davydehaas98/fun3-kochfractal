@@ -27,7 +27,7 @@ import javafx.stage.Stage;
  * @author Nico Kuijpers
  * Modified for FUN3 by Gertjan Schouten
  */
-public class FUN3KechFractalFX extends Application {
+public class FUN3KochFractalFX extends Application {
 
     // Zoom and drag
     private double zoomTranslateX = 0.0;
@@ -39,8 +39,8 @@ public class FUN3KechFractalFX extends Application {
     private double lastDragY = 0.0;
 
     // Koch manager
-    // TO DO: Create class KechManager in package calculate
-    private KechManager kechManager;
+    // TO DO: Create class KochManager in package calculate
+    private KochManager kochManager;
 
     // Current level of Koch fractal
     private int currentLevel = 1;
@@ -198,8 +198,8 @@ public class FUN3KechFractalFX extends Application {
 
         // Create Koch manager and set initial level
         resetZoom();
-        kechManager = new KechManager(this);
-        kechManager.changeLevel(currentLevel);
+        kochManager = new KochManager(this);
+        kochManager.changeLevel(currentLevel);
 
         // Create the scene and add the grid pane
         Group root = new Group();
@@ -289,7 +289,7 @@ public class FUN3KechFractalFX extends Application {
         Platform.runLater(new Runnable(){
             @Override
             public void run() {
-                kechManager.drawEdges();
+                kochManager.drawEdges();
             }
         });
     }
@@ -299,7 +299,7 @@ public class FUN3KechFractalFX extends Application {
             // resetZoom();
             currentLevel++;
             labelLevel.setText("Level: " + currentLevel);
-            kechManager.changeLevel(currentLevel);
+            kochManager.changeLevel(currentLevel);
         }
     } 
     
@@ -308,13 +308,13 @@ public class FUN3KechFractalFX extends Application {
             // resetZoom();
             currentLevel--;
             labelLevel.setText("Level: " + currentLevel);
-            kechManager.changeLevel(currentLevel);
+            kochManager.changeLevel(currentLevel);
         }
     } 
 
     private void fitFractalButtonActionPerformed(ActionEvent event) {
         resetZoom();
-        kechManager.drawEdges();
+        kochManager.drawEdges();
     }
     
     private void kochPanelMouseClicked(MouseEvent event) {
@@ -329,7 +329,7 @@ public class FUN3KechFractalFX extends Application {
             }
             zoomTranslateX = (int) (event.getX() - originalPointClickedX * zoom);
             zoomTranslateY = (int) (event.getY() - originalPointClickedY * zoom);
-            kechManager.drawEdges();
+            kochManager.drawEdges();
         }
     }                                      
 
@@ -338,7 +338,7 @@ public class FUN3KechFractalFX extends Application {
         zoomTranslateY = zoomTranslateY + event.getY() - lastDragY;
         lastDragX = event.getX();
         lastDragY = event.getY();
-        kechManager.drawEdges();
+        kochManager.drawEdges();
     }
 
     private void kochPanelMousePressed(MouseEvent event) {

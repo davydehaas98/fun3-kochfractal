@@ -6,9 +6,8 @@ package calculate;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
-import fun3kochfractalfx.FUN3KechFractalFX;
+import fun3kochfractalfx.FUN3KochFractalFX;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import timeutil.TimeStamp;
 
 /**
@@ -16,16 +15,16 @@ import timeutil.TimeStamp;
  * @author Nico Kuijpers
  * Modified for FUN3 by Gertjan Schouten
  */
-public class KechManager {
+public class KochManager {
     private ArrayList<Edge> edges;
     private MyTask taskLeft;
     private MyTask taskRight;
     private MyTask taskBottom;
-    private FUN3KechFractalFX application;
+    private FUN3KochFractalFX application;
     private TimeStamp tsCalc;
     private TimeStamp tsDraw;
     
-    public KechManager(FUN3KechFractalFX application) {
+    public KochManager(FUN3KochFractalFX application) {
         this.application = application;
         this.edges = new ArrayList<>();
         this.tsCalc = new TimeStamp();
@@ -35,9 +34,9 @@ public class KechManager {
     public void changeLevel(int nxt) {
         edges.clear();
         SharedCount sharedCount = new SharedCount();
-        taskLeft = new MyTask(Generate.LEFT, nxt, sharedCount);
-        taskRight = new MyTask(Generate.RIGHT, nxt, sharedCount);
-        taskBottom = new MyTask(Generate.BOTTOM, nxt, sharedCount);
+        taskLeft = new MyTask(Generate.LEFT, nxt);
+        taskRight = new MyTask(Generate.RIGHT, nxt);
+        taskBottom = new MyTask(Generate.BOTTOM, nxt);
         application.getProgLeft().progressProperty().bind(taskLeft.progressProperty());
         application.getProgRight().progressProperty().bind(taskRight.progressProperty());
         application.getProgBottom().progressProperty().bind(taskBottom.progressProperty());
@@ -71,7 +70,7 @@ public class KechManager {
                 }
             }
         });
-        pool.shutdown();9
+        pool.shutdown();
     }
     
     public void drawEdges() {

@@ -13,13 +13,13 @@ import java.util.Observable;
  * @author Peter Boots
  * Modified for FUN3 by Gertjan Schouten
  */
-public class KechFractal extends Observable {
+public class KochFractal extends Observable {
     private MyTask myTask;
     private int level = 1;      // The current level of the fractal
     private int nrOfEdges = 3;  // The number of edges in the current level of the fractal
     private float hue;          // Hue value of color for next edge
     private boolean cancelled;  // Flag to indicate that calculation has been cancelled
-    public KechFractal(MyTask myTask) {
+    public KochFractal(MyTask myTask) {
         this.myTask = myTask;
     }
 
