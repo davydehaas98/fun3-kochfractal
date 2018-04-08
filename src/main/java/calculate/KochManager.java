@@ -33,7 +33,6 @@ public class KochManager {
 
     public void changeLevel(int nxt) {
         edges.clear();
-        SharedCount sharedCount = new SharedCount();
         taskLeft = new MyTask(Generate.LEFT, nxt);
         taskRight = new MyTask(Generate.RIGHT, nxt);
         taskBottom = new MyTask(Generate.BOTTOM, nxt);
