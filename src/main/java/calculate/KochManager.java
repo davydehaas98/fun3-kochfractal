@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.concurrent.*;
 
 import fun3kochfractalfx.FUN3KochFractalFX;
-import javafx.application.Platform;
 import timeutil.TimeStamp;
 
 /**
@@ -23,26 +22,38 @@ public class KochManager {
     private FUN3KochFractalFX application;
     private TimeStamp tsCalc;
     private TimeStamp tsDraw;
+    private ExecutorService pool;
     
     public KochManager(FUN3KochFractalFX application) {
         this.application = application;
         this.edges = new ArrayList<>();
         this.tsCalc = new TimeStamp();
         this.tsDraw = new TimeStamp();
+        pool = Executors.newFixedThreadPool(3);
     }
 
     public void changeLevel(int nxt) {
+        if(taskLeft != null){
+            taskLeft.cancel();
+        }
+        if(taskRight != null){
+            taskRight.cancel();
+        }
+        if(taskBottom != null){
+            taskBottom.cancel();
+        }
         edges.clear();
         taskLeft = new MyTask(Generate.LEFT, nxt);
         taskRight = new MyTask(Generate.RIGHT, nxt);
         taskBottom = new MyTask(Generate.BOTTOM, nxt);
+
         application.getProgLeft().progressProperty().bind(taskLeft.progressProperty());
         application.getProgRight().progressProperty().bind(taskRight.progressProperty());
         application.getProgBottom().progressProperty().bind(taskBottom.progressProperty());
         application.getLblProgressLeftText().textProperty().bind(taskLeft.messageProperty());
         application.getLblProgressRightText().textProperty().bind(taskRight.messageProperty());
         application.getLblProgressBottomText().textProperty().bind(taskBottom.messageProperty());
-        ExecutorService pool = Executors.newFixedThreadPool(3);
+
         tsCalc.init();
         tsCalc.setBegin("Begin");
         pool.submit(taskLeft);
@@ -55,24 +66,21 @@ public class KochManager {
                     edges.addAll(taskLeft.get());
                     edges.addAll(taskRight.get());
                     edges.addAll(taskBottom.get());
+                    taskLeft = null;
+                    taskRight = null;
+                    taskBottom = null;
                     tsCalc.setEnd("End");
                     application.requestDrawEdges();
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            application.setTextNrEdges("" + (edges.size()));
-                            application.setTextCalc(tsCalc.toString());
-                        }
-                    });
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         });
-        pool.shutdown();
     }
     
     public void drawEdges() {
+        application.setTextCalc(tsCalc.toString());
+        application.setTextNrEdges("" + (edges.size()));
         System.out.println("Draw!");
         tsDraw.init();
         tsDraw.setBegin("Begin");
@@ -82,5 +90,8 @@ public class KochManager {
         }
         tsDraw.setEnd("End");
         application.setTextDraw(tsDraw.toString());
+    }
+    public void stopPool(){
+        pool.shutdown();
     }
 }

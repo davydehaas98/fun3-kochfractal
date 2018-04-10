@@ -10,17 +10,23 @@ public class MyTask extends Task<ArrayList<Edge>> implements Observer {
     private KochFractal kochFractal;
     private Generate generate;
     private ArrayList<Edge> edges;
-    MyTask(Generate generate, int nxt){
+
+    MyTask(Generate generate, int nxt) {
         this.generate = generate;
         kochFractal = new KochFractal(this);
         edges = new ArrayList<>();
         kochFractal.setLevel(nxt);
         kochFractal.addObserver(this);
     }
+    @Override
+    protected void cancelled() {
+        super.cancel();
+        kochFractal.cancel();
+    }
 
     @Override
-    protected ArrayList<Edge> call(){
-        switch (generate){
+    protected ArrayList<Edge> call() {
+        switch (generate) {
             case RIGHT:
                 kochFractal.generateRightEdge();
                 break;
@@ -36,8 +42,8 @@ public class MyTask extends Task<ArrayList<Edge>> implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        edges.add((Edge)arg);
-        updateProgress(edges.size(), kochFractal.getNrOfEdges()/3);
+        edges.add((Edge) arg);
+        updateProgress(edges.size(), kochFractal.getNrOfEdges() / 3);
         updateMessage("" + edges.size());
     }
 }

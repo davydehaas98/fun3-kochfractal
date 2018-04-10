@@ -76,7 +76,8 @@ public class FUN3KochFractalFX extends Application {
     private final WritableImage image = new WritableImage(kpWidth, kpHeight);
     @Override
     public void stop(){
-        System.out.println("Stop");
+        System.out.println("Application Stopped");
+        kochManager.stopPool();
     }
     @Override
     public void start(Stage primaryStage) {
